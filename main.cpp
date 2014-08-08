@@ -2,9 +2,12 @@
 
 using namespace std;
 
+#include <longint.h>
+
 int main()
 {
-    cout << "Hello World!" << endl;
+    TLongInt l(123456);
+    cout << "l = " << l.toStdString() << endl;
     return 0;
 }
 
