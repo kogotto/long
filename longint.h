@@ -17,18 +17,32 @@ public:
         }
     }
 
-    friend TLongInt operator+(TLongInt & lhs, TLongInt & rhs) {
-        TLongInt result;
-        TLongInt::equalize(lhs, rhs, result);
+    friend TLongInt operator+(const TLongInt & lhs, const TLongInt & rhs) {
+        TLongInt result(lhs);
+        return result += rhs;
+    }
 
-        value_t p = 0;
-        for (size_t i = 0; i < result.array.size(); ++i) {
-            value_t s = lhs.array[i] + rhs.array[i] + p;
-            result.array[i] = s % base;
-            p = s / base;
+    TLongInt & operator+=(const TLongInt & rhs) {
+        const size_t lhsSize = array.size();
+        const size_t rhsSize = rhs.array.size();
+        array.resize(std::max(lhsSize, rhsSize));
+
+        value_t overflow = 0;
+        for (size_t i = 0; i < rhsSize; ++i) {
+            array[i] += rhs.array[i] + overflow;
+            overflow = array[i] / base;
+            array[i] %= base;
+        }
+        for (size_t i = rhsSize; i < lhsSize; ++i) {
+            array[i] += overflow;
+            overflow = array[i] / base;
+            array[i] %= base;
+        }
+        if (overflow != 0) {
+            array.push_back(overflow);
         }
 
-        return result;
+        return *this;
     }
 
     std::string toStdString() const {
