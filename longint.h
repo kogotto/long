@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <iostream>
 
 class TLongInt {
 public:
@@ -44,6 +45,10 @@ public:
 
         return *this;
     }
+
+//    TLongInt & negate() {
+//        for
+//    }
 
     std::string toStdString() const {
         std::string result;
@@ -94,5 +99,9 @@ private:
     static const value_t base = 100;
     array_t array;
 };
+
+inline std::ostream & operator << (std::ostream & stream, const TLongInt & rhs) {
+    return stream << rhs.toStdString();
+}
 
 #endif // LONGINT_H
