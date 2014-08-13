@@ -74,28 +74,6 @@ private:
         std::string & str;
     };
 
-    static void equalize(TLongInt & first, TLongInt & second, TLongInt & third) {
-        size_t maxLength = first.array.size();
-        if (second.array.size() > maxLength) {
-            maxLength = second.array.size();
-        }
-        if (third.array.size() > maxLength) {
-            maxLength = third.array.size();
-        }
-
-        ++maxLength;
-
-        grow(first, maxLength);
-        grow(second, maxLength);
-        grow(third, maxLength);
-    }
-
-    static void grow(TLongInt & arg, size_t size) {
-        while (arg.array.size() < size) {
-            arg.array.push_back(0);
-        }
-    }
-
     static const value_t base = 100;
     array_t array;
 };
