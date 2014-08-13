@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <functional>
 #include <iostream>
 
 class TLongInt {
@@ -46,6 +47,40 @@ public:
         return *this;
     }
 
+    TLongInt & negate() {
+        std::transform(
+                    array.begin(),
+                    array.end(),
+                    array.begin(),
+                    std::negate<value_t>());
+        return *this;
+    }
+
+    friend TLongInt operator-(const TLongInt & arg) {
+        TLongInt result(arg);
+        return result.negate();
+    }
+
+    friend TLongInt operator-(const TLongInt & lhs, const TLongInt & rhs) {
+        TLongInt result(lhs);
+        return result -= rhs;
+    }
+
+    TLongInt & operator-=(const TLongInt & rhs) {
+        return *this += (-rhs);
+    }
+
+    bool isPositive() const;
+    bool isNegative() const {
+        array_t::const_iterator it = std::find_if(
+                    array.cbegin(),
+                    array.cend(),
+                    [](value_t arg){return arg < 0;});
+
+        return it != array.cend();
+    }
+    bool isNull() const;
+
 //    TLongInt & negate() {
 //        for
 //    }
@@ -55,7 +90,7 @@ public:
         std::for_each(array.rbegin(),
                       array.rend(),
                       Tostringator(result));
-        return result;
+        return sign() + result;
     }
 
 private:
@@ -67,12 +102,18 @@ private:
         {}
 
         void operator() (value_t arg) {
-            str.append(std::to_string(arg));
+            str.append(std::to_string(std::abs(arg)));
         }
 
     private:
         std::string & str;
     };
+
+    std::string sign() const {
+        return isNegative() ?
+                    std::string(1, '-') :
+                    std::string();
+    }
 
     static const value_t base = 100;
     array_t array;
