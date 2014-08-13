@@ -46,6 +46,19 @@ public:
         return *this;
     }
 
+    bool isPositive() const;
+    bool isNegative() const {
+        for (array_t::const_iterator it = array.cbegin();
+             it != array.cend();
+             ++it) {
+            if (*it < 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+    bool isNull() const;
+
 //    TLongInt & negate() {
 //        for
 //    }
@@ -55,7 +68,7 @@ public:
         std::for_each(array.rbegin(),
                       array.rend(),
                       Tostringator(result));
-        return result;
+        return sign() + result;
     }
 
 private:
@@ -67,12 +80,18 @@ private:
         {}
 
         void operator() (value_t arg) {
-            str.append(std::to_string(arg));
+            str.append(std::to_string(std::abs(arg)));
         }
 
     private:
         std::string & str;
     };
+
+    std::string sign() const {
+        return isNegative() ?
+                    std::string(1, '-') :
+                    std::string();
+    }
 
     static void equalize(TLongInt & first, TLongInt & second, TLongInt & third) {
         size_t maxLength = first.array.size();
