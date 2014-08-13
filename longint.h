@@ -7,24 +7,29 @@
 #include <functional>
 #include <iostream>
 
-class TLongInt {
+template<class T>
+class TLong {
 public:
-    TLongInt()
-    {}
+    typedef T value_t;
 
-    TLongInt(int src) {
+    TLong(int src = 0) {
+        if (src) {
+            array.push_back(0);
+            return;
+        }
+
         while (src) {
             array.push_back(src % base);
             src /= base;
         }
     }
 
-    friend TLongInt operator+(const TLongInt & lhs, const TLongInt & rhs) {
-        TLongInt result(lhs);
+    friend TLong operator+(const TLong & lhs, const TLong & rhs) {
+        TLong result(lhs);
         return result += rhs;
     }
 
-    TLongInt & operator+=(const TLongInt & rhs) {
+    TLong & operator+=(const TLong & rhs) {
         const size_t lhsSize = array.size();
         const size_t rhsSize = rhs.array.size();
         array.resize(std::max(lhsSize, rhsSize));
@@ -47,7 +52,7 @@ public:
         return *this;
     }
 
-    TLongInt & negate() {
+    TLong & negate() {
         std::transform(
                     array.begin(),
                     array.end(),
@@ -56,23 +61,23 @@ public:
         return *this;
     }
 
-    friend TLongInt operator-(const TLongInt & arg) {
-        TLongInt result(arg);
+    friend TLong operator-(const TLong & arg) {
+        TLong result(arg);
         return result.negate();
     }
 
-    friend TLongInt operator-(const TLongInt & lhs, const TLongInt & rhs) {
-        TLongInt result(lhs);
+    friend TLong operator-(const TLong & lhs, const TLong & rhs) {
+        TLong result(lhs);
         return result -= rhs;
     }
 
-    TLongInt & operator-=(const TLongInt & rhs) {
+    TLong & operator-=(const TLong & rhs) {
         return *this += (-rhs);
     }
 
     bool isPositive() const;
     bool isNegative() const {
-        array_t::const_iterator it = std::find_if(
+        typename array_t::const_iterator it = std::find_if(
                     array.cbegin(),
                     array.cend(),
                     [](value_t arg){return arg < 0;});
@@ -94,7 +99,6 @@ public:
     }
 
 private:
-    typedef int value_t;
     typedef std::vector<value_t> array_t;
     struct Tostringator {
         Tostringator(std::string & str):
@@ -119,7 +123,11 @@ private:
     array_t array;
 };
 
-inline std::ostream & operator << (std::ostream & stream, const TLongInt & rhs) {
+typedef TLong<int> TLongInt;
+
+template<class value_t>
+inline std::ostream & operator << (std::ostream & stream,
+                                   const TLong<value_t> & rhs) {
     return stream << rhs.toStdString();
 }
 

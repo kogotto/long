@@ -4,8 +4,6 @@ using namespace std;
 
 #include <longint.h>
 
-void foo(const TLongInt & );
-
 #define print(s) { cout << #s << " = " << (s) << endl; }
 
 int main()
