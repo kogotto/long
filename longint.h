@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <functional>
 #include <iostream>
 
 class TLongInt {
@@ -44,6 +45,29 @@ public:
         }
 
         return *this;
+    }
+
+    TLongInt & negate() {
+        std::transform(
+                    array.begin(),
+                    array.end(),
+                    array.begin(),
+                    std::negate<value_t>());
+        return *this;
+    }
+
+    friend TLongInt operator-(const TLongInt & arg) {
+        TLongInt result(arg);
+        return result.negate();
+    }
+
+    friend TLongInt operator-(const TLongInt & lhs, const TLongInt & rhs) {
+        TLongInt result(lhs);
+        return result -= rhs;
+    }
+
+    TLongInt & operator-=(const TLongInt & rhs) {
+        return *this += (-rhs);
     }
 
     bool isPositive() const;

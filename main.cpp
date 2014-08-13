@@ -18,6 +18,12 @@ int main()
     print(l + r);
     print(l + 100);
     print(n);
+    print(n + r);
+    print(n + l);
+    print(l - r);
+    print(l - n);
+    print(l - 6);
+    print(-l);
     return 0;
 }
 
