@@ -6,14 +6,18 @@ using namespace std;
 
 void foo(const TLongInt & );
 
+#define print(s) { cout << #s << " = " << (s) << endl; }
+
 int main()
 {
     TLongInt l(123456);
     TLongInt r(999999);
-    cout << "l = " << l << endl;
-    cout << "r = " << r << endl;
-    cout << "l + r = " << l + r << endl;
-    cout << "l + 100 = " << l + 100 << endl;
+    TLongInt n(-999999);
+    print(l);
+    print(r);
+    print(l + r);
+    print(l + 100);
+    print(n);
     return 0;
 }
 
