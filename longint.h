@@ -48,14 +48,12 @@ public:
 
     bool isPositive() const;
     bool isNegative() const {
-        for (array_t::const_iterator it = array.cbegin();
-             it != array.cend();
-             ++it) {
-            if (*it < 0) {
-                return true;
-            }
-        }
-        return false;
+        array_t::const_iterator it = std::find_if(
+                    array.cbegin(),
+                    array.cend(),
+                    [](value_t arg){return arg < 0;});
+
+        return it != array.cend();
     }
     bool isNull() const;
 
