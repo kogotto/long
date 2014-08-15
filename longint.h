@@ -86,10 +86,6 @@ public:
     }
     bool isNull() const;
 
-//    TLongInt & negate() {
-//        for
-//    }
-
     std::string toStdString() const {
         std::string result(sign());
         std::for_each(array.rbegin(),
