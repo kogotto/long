@@ -77,12 +77,13 @@ public:
 
     bool isPositive() const;
     bool isNegative() const {
-        typename array_t::const_iterator it = std::find_if(
+        auto end = array.cend();
+        auto it = std::find_if(
                     array.cbegin(),
-                    array.cend(),
+                    end,
                     [](value_t arg){return arg < 0;});
 
-        return it != array.cend();
+        return it != end;
     }
     bool isNull() const;
 
