@@ -13,7 +13,7 @@ public:
     typedef T value_t;
 
     TLong(int src = 0) {
-        if (src) {
+        if (src == 0) {
             array.push_back(0);
             return;
         }
@@ -91,27 +91,17 @@ public:
 //    }
 
     std::string toStdString() const {
-        std::string result;
+        std::string result(sign());
         std::for_each(array.rbegin(),
                       array.rend(),
-                      Tostringator(result));
-        return sign() + result;
+                      [&result](value_t arg) {
+            result.append(std::to_string(std::abs(arg)));
+        });
+        return result;
     }
 
 private:
     typedef std::vector<value_t> array_t;
-    struct Tostringator {
-        Tostringator(std::string & str):
-            str(str)
-        {}
-
-        void operator() (value_t arg) {
-            str.append(std::to_string(std::abs(arg)));
-        }
-
-    private:
-        std::string & str;
-    };
 
     std::string sign() const {
         return isNegative() ?
